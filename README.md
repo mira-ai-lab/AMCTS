@@ -14,33 +14,19 @@ Based on AMCS, we constructed a high-quality process supervision dataset contain
 
 ```
 AMCS/
-├── adaptive_omegaprm/                   
-│   ├── grader.py      
-│   ├── llm_utils.py         
-│   ├── omegaprm.py
+├── adaptive_omegaprm/                #data generation    
+│   ├── grader.py                     
+│   ├── llm_utils.py                  
+│   ├── omegaprm.py                   #Core data generation logic
 │   ├── process_json.py
-│   ├── run_omegaprm.py
-│   └── run_omegaprm_multi_gpu.sh
-├── config/  
-│   ├── config_utils.py
-├── distributed/
-│   ├── utils.py                 
-├── envs/                
+│   ├── run_omegaprm.py          
+│   └── run_omegaprm_multi_gpu.sh               
+├── envs/                             #Data environment
 │   ├── MATH/            
 │   ├── tests/    
 │   ├── init.py        
-│   └── base_env.py      
-├── gen_rm/
-│   ├── fine_tuning.py          
-│   └── organize_dataset.py           
-├── preprocess/                     
-│   ├── src/            
-│   ├── tests/          
-│   └── cli.py   
-├── prm/
-│   ├── infer_fns.py        
-│   └── offline_eval.py
-├── reason/
+│   └── base_env.py       
+├── reason/                           #Core reasoning logic
 │   ├── evaluation/ 
 │   ├── guided_search/ 
 │   ├── inference/ 
@@ -51,10 +37,8 @@ AMCS/
 │   ├── cot_greedy.sh  
 │   ├── cot_rerank.sh  
 │   └── vanila_mcts.sh
-├── train/mat/scripts/       
-│   └── convert.py
 ├── README.md
-└── requirements.txt            
+└── requirements.txt                   # Python dependencies   
 ```
 
 
@@ -129,4 +113,15 @@ sh scripts/eval/cot_rerank.sh
 
 If you find our work helpful for your research, please consider citing our paper:
 
+```
+@misc{ma2025staticdynamicadaptivemonte,
+      title={From Static to Dynamic: Adaptive Monte Carlo Search for Mathematical Process Supervision}, 
+      author={Jie Ma and Shihao Qi and Rui Xing and Ziang Yin and Bifan Wei and Jun Liu and Tongliang Liu},
+      year={2025},
+      eprint={2509.24351},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2509.24351}, 
+}
+```
 
