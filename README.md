@@ -10,37 +10,90 @@ To address these issues, we propose the Adaptive Monte Carlo Search (AMCS) frame
 
 Based on AMCS, we constructed a high-quality process supervision dataset containing approximately 200000 samples and trained AMCS-PRM. Experimental results have shown that our method achieves the current best performance on multiple mathematical inference benchmarks such as MATH, AIME, Olympiad Bench, etc. This demonstrates the significant value of high-quality process supervision in enhancing model capabilities.
 
-## Environment Configuration
+## 🛠️ Project Structure
 
-2. Create a virtual environment:
-   ```bash
-   conda create -n amcs python=3.10
-   conda activate amcs
-   ```
+```
+AMCS/
+├── adaptive_omegaprm/                   
+│   ├── grader.py      
+│   ├── llm_utils.py         
+│   ├── omegaprm.py
+│   ├── process_json.py
+│   ├── run_omegaprm.py
+│   └── run_omegaprm_multi_gpu.sh
+├── config/  
+│   ├── config_utils.py
+├── distributed/
+│   ├── utils.py                 
+├── envs/                
+│   ├── MATH/            
+│   ├── tests/    
+│   ├── init.py        
+│   └── base_env.py      
+├── gen_rm/
+│   ├── fine_tuning.py          
+│   └── organize_dataset.py           
+├── preprocess/                     
+│   ├── src/            
+│   ├── tests/          
+│   └── cli.py   
+├── prm/
+│   ├── infer_fns.py        
+│   └── offline_eval.py
+├── reason/
+│   ├── evaluation/ 
+│   ├── guided_search/ 
+│   ├── inference/ 
+│   ├── llm_service/ 
+│   └── reranking/
+├── scripts/eval/
+│   ├── beam_search.sh      
+│   ├── cot_greedy.sh  
+│   ├── cot_rerank.sh  
+│   └── vanila_mcts.sh
+├── train/mat/scripts/       
+│   └── convert.py
+├── README.md
+└── requirements.txt            
+```
 
-3. Install the required dependency packages.
-   ```bash
-   pip install -r requirements.txt
-   ```
 
-## Usage
 
-### 1. Generation of MathSearch-200K Datasets
+## 🚀Getting Start
 
-Use `adaptive_omegaprm/run_omegaprm.py`  to generate process supervision data.
+### 1.Create a virtual environment
+
+```bash
+conda create -n amcs python=3.10
+conda activate amcs
+```
+### 2.Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+### 3. Generation of MathSearch-200K Datasets
+
+Run `adaptive_omegaprm/process.py`  to split the original data.
+
+```
+python adaptive_omegaprm/process.py
+```
+
+Then,use `adaptive_omegaprm/run_omegaprm.py`  to generate process supervision data.
 
 ```bash
 # Run data generation on multiple GPUs
 bash adaptive_omegaprm/run_omegaprm_multi_gpu.sh
 ```
 
-### 2. Process Reward Model Training
+### 4. Process Reward Model Training
 
 Use `gen_rm/fine_tuning.py` to train a process reward model.
 
 ```
 python gen_rm/fine_tuning.py \
---model_name_or_path "Qwen/Qwen2.5-Math-7B-Instruct" \ 
+--model_name_or_path "path to your model" \ 
 --train_file "path/to/your/generated_data.jsonl" \
 --output_dir "./models/amcs-prm" \
 --num_train_epochs 3 \
@@ -48,14 +101,43 @@ python gen_rm/fine_tuning.py \
 --gradient_accumulation_steps 8 \# ... other training parameters
 ```
 
+### 5. Inference-time Verification
 
+#### Start Services
 
-### 3. Inference-time Verification
+Before running inference, please modify the following variables in the scripts under `reason/llm_service/` .
 
-This section aims to use AMCS-PRM as a validator to improve the performance of generative models in mathematical problems through different search strategies. Use MCTS for evaluation. First, start the model service, and then run the evaluation script.
+- `$POLICY_MODEL_NAME`: Set this to the name of the policy model you wish to use.
+- `$VALUE_MODEL_NAME`: Set this to the name of the value model you wish to use.
 
-`bash scripts/eval/vanila_mcts.sh [ACTOR_MODEL] [PRM_MODEL] [DATASET] [OUTPUT_DIR]`
+To start the model service,run:
 
-## Reference
+```
+sh reason/llm_service/create_service_qwen2.5_math_vllm.sh
+```
+
+#### Run Inference
+
+Make sure the parameters (`--LM`, `--RM`) in the script aligns with the variables (`$POLICY_MODEL_NAME`, `$VALUE_MODEL_NAME`).
+
+```
+export PYTHONPATH=$(pwd)
+sh scripts/eval/cot_rerank.sh
+```
+
+## 📑Citation
 
 If you find our work helpful for your research, please consider citing our paper:
+
+```
+@misc{ma2025staticdynamicadaptivemonte,
+      title={From Static to Dynamic: Adaptive Monte Carlo Search for Mathematical Process Supervision}, 
+      author={Jie Ma and Shihao Qi and Rui Xing and Ziang Yin and Bifan Wei and Jun Liu and Tongliang Liu},
+      year={2025},
+      eprint={2509.24351},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2509.24351}, 
+}
+```
+
