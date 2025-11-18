@@ -109,6 +109,10 @@ export PYTHONPATH=$(pwd)
 sh scripts/eval/cot_rerank.sh
 ```
 
+## 🧱 Credits
+
+The core code of this project is based on [openr]([openreasoner/openr: OpenR: An Open Source Framework for Advanced Reasoning with Large Language Models](https://github.com/openreasoner/openr))
+
 ## 📑Citation
 
 If you find our work helpful for your research, please consider citing our paper:
