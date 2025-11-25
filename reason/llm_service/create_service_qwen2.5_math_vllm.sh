@@ -7,7 +7,7 @@ WORKER_BASE_PORT=30010
 echo PYTHON_EXECUTABLE=$(which python3)
 PYTHON_EXECUTABLE=$(which python3)
 
-MODEL_BASE=/hpc2ssd/JH_DATA/spooler/qxiao183/workspace/hf_models
+MODEL_BASE=/../
 POLICY_MODEL_NAME=GLM-4-9B-0414
 VALUE_MODEL_NAME=Qwen2.5-Math-7B-Instruct
 MODEL_PATH=path
