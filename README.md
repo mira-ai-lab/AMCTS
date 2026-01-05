@@ -55,7 +55,3 @@ python gen_rm/fine_tuning.py \
 This section aims to use AMCTS-PRM as a validator to improve the performance of generative models in mathematical problems through different search strategies. Use MCTS for evaluation. First, start the model service, and then run the evaluation script.
 
 `bash scripts/eval/vanila_mcts.sh [ACTOR_MODEL] [PRM_MODEL] [DATASET] [OUTPUT_DIR]`
-
-## Reference
-
-If you find our work helpful for your research, please consider citing our paper:
